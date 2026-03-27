@@ -52,7 +52,7 @@ npm run dev
 2. Импортируйте проект в [Vercel](https://vercel.com)
 3. Включите **Edge Functions** (для API routes)
 
-**Важно:** Для работы API нужно загрузить файл `data/cars.db` или настроить его генерацию при сборке.
+**Важно:** Файлы `data/cars.db` и `data/cars.json` коммитятся в репозиторий и автоматически деплоятся на Vercel.
 
 ## Автообновление данных
 
@@ -63,9 +63,18 @@ GitHub Actions запускает парсер каждый день в 00:00 UT
 
 Для ручного запуска: GitHub → Actions → "Parse ENCARS Daily" → "Run workflow"
 
+### Настройка Vercel Deploy Hook (опционально)
+
+Для гарантированного обновления сайта после парсинга:
+
+1. В Vercel: `Settings` → `Git` → `Deploy Hooks` → `Create Hook`
+2. Скопируйте URL хука
+3. Добавьте в GitHub Secrets как `VERCEL_DEPLOY_HOOK`
+4. Workflow автоматически вызовет хук после пуша
+
 ## Технологии
 
-- **Next.js 15** — React фреймворк
+- **Next.js 16** — React фреймворк
 - **TypeScript** — типизация
 - **Tailwind CSS** — стили
 - **Playwright** — парсинг
