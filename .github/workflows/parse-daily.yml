@@ -1,0 +1,38 @@
+name: Parse ENCARS Daily
+
+on:
+  schedule:
+    # Запуск каждый день в 00:00 UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: # Ручной запуск
+
+jobs:
+  parse:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+
+      - name: Run parser
+        run: npm run parse
+
+      - name: Commit and push data
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/
+          git diff --staged --quiet || git commit -m "chore: update cars data [skip ci]"
+          git push
